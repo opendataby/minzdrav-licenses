@@ -48,14 +48,14 @@ ST_PROPS = 'properties'
 
 _fieldnames = (
     'category',
-    'extra_region',
-    'company_name',
-    'company_addr',
-    'company_license_number',
-    'company_license_start_date',
-    'company_license_end_date',
-    'office_name',
-    'office_addr',
+    'extraRegion',
+    'companyName',
+    'companyAddr',
+    'companyLicenseNumber',
+    'companyLicenseStartDate',
+    'companyLicenseEndDate',
+    'officeName',
+    'officeAddr',
     'properties',
 )
 
@@ -185,7 +185,7 @@ def process_text(file, extra_region=None):
 
 
 def do():
-    writer = csv.DictWriter(open('raw_med.csv', 'w'), fieldnames=_fieldnames)
+    writer = csv.DictWriter(open('minzdrav-licenses-raw.csv', 'w'), fieldnames=_fieldnames)
     writer.writeheader()
 
     for zipped_file in fetch_docs():
@@ -220,14 +220,14 @@ def do():
                 assert properties
                 writer.writerow({
                     'category': category,
-                    'extra_region': extra_region.strip(),
-                    'company_name': company_name.strip(),
-                    'company_addr': company_addr.strip(),
-                    'company_license_number': company_license_number.strip(),
-                    'company_license_start_date': company_license_start_date.strip(),
-                    'company_license_end_date': company_license_end_date.strip(),
-                    'office_name': office_name.strip(),
-                    'office_addr': office_addr.strip(),
+                    'extraRegion': extra_region.strip(),
+                    'companyName': company_name.strip(),
+                    'companyAddr': company_addr.strip(),
+                    'companyLicenseNumber': company_license_number.strip(),
+                    'companyLicenseStartDate': company_license_start_date.strip(),
+                    'companyLicenseEndDate': company_license_end_date.strip(),
+                    'officeName': office_name.strip(),
+                    'officeAddr': office_addr.strip(),
                     'properties': '\t'.join(properties).strip(),
                 })
 
