@@ -54,8 +54,7 @@ _fieldnames = (
     'companyLicenseNumber',
     'companyLicenseStartDate',
     'companyLicenseEndDate',
-    'officeName',
-    'officeAddr',
+    'office',
     'properties',
 )
 
@@ -164,18 +163,10 @@ def process_text(file, extra_region=None):
             if state != ST_ITEMS:
                 state = ST_ITEMS
                 properties = []
-                if ' - ' in line:
-                    item = line.split(' - ', 1) + [properties]
-                else:
-                    item = ['', line, properties]
+                item = [line, properties]
                 items.append(item)
             else:
-                if not item[0]:
-                    item[1] += ' ' + line
-                    if ' - ' in item[1]:
-                        item[0], item[1] = item[1].split(' - ', 1)
-                else:
-                    item[1] += ' ' + line
+                item[0] += ' ' + line
             continue
         else:
             state = ST_PROPS
@@ -216,7 +207,7 @@ def do():
             company_license_number = company[2].strip()
             company_license_start_date = company[3].strip()
             company_license_end_date = company[4].strip()
-            for office_name, office_addr, properties in items:
+            for office, properties in items:
                 assert properties
                 writer.writerow({
                     'category': category,
@@ -226,8 +217,7 @@ def do():
                     'companyLicenseNumber': company_license_number.strip(),
                     'companyLicenseStartDate': company_license_start_date.strip(),
                     'companyLicenseEndDate': company_license_end_date.strip(),
-                    'officeName': office_name.strip(),
-                    'officeAddr': office_addr.strip(),
+                    'office': office.strip(),
                     'properties': '\t'.join(properties).strip(),
                 })
 
@@ -244,7 +234,7 @@ class Test(unittest.TestCase):
                 continue
             html_path = os.path.join(TEST_PATH, file)
             test_path = html_path[:-len(HTML_EXT)] + CHECK_EXT
-            self.assertEqual(process_text(open(html_path, 'rb')),
+            self.assertEqual(process_text(open(html_path, 'rb'), 'test'),
                              json.load(open(test_path)), file)
 
 
